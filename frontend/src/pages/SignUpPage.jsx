@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ShipWheelIcon } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios.js"; // make sure this is correctly configured
-import { signup } from "../lib/api.js";
+import { signup, getAuthUser } from "../lib/api.js";
 
 const SignUpPage = () => {
   const [signupData, setSignupData] = useState({
@@ -13,6 +13,7 @@ const SignUpPage = () => {
   });
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {
     mutate: signupMutation,
@@ -20,9 +21,16 @@ const SignUpPage = () => {
     error,
   } = useMutation({
     mutationFn: signup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    onSuccess: async (data) => {
+      // Immediately update the cache with the new user data
+      queryClient.setQueryData(["authUser"], { user: data.user });
+      
+      // Also invalidate to ensure fresh data
+      await queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      
       alert("Account created successfully!");
+      // Navigate to onboarding since new users are not onboarded
+      navigate("/onboarding");
     },
     onError: (err) => {
       console.error("Signup error:", err);
