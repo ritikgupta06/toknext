@@ -13,9 +13,11 @@ import PageLoader from "./components/PageLoader.jsx";
 import useAuthUser from "./hooks/useAuthUser.js";
 import OnboardingPage from "./pages/OnBoardingPage.jsx";
 import Layout from "./components/Layout.jsx";
+import { useThemeStore } from "./store/useThemeStore.js";
 
 const App = () => {
   const { isLoading, authUser, isError } = useAuthUser();
+  const { theme } = useThemeStore();
 
   const isAuthenticated = Boolean(authUser);
   const isOnboarded = authUser?.isOnboarded;
@@ -25,7 +27,7 @@ const App = () => {
   console.log("Auth user:", authUser);
 
   return (
-    <div className="h-screen" data-theme="dim">
+    <div className="h-screen" data-theme={theme}>
       <Routes>
         {/* Home Page */}
         <Route
