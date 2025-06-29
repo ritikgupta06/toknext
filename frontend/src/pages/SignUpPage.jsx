@@ -24,10 +24,10 @@ const SignUpPage = () => {
     onSuccess: async (data) => {
       // Immediately update the cache with the new user data
       queryClient.setQueryData(["authUser"], { user: data.user });
-      
+
       // Also invalidate to ensure fresh data
       await queryClient.invalidateQueries({ queryKey: ["authUser"] });
-      
+
       alert("Account created successfully!");
       // Navigate to onboarding since new users are not onboarded
       navigate("/onboarding");
@@ -53,7 +53,7 @@ const SignUpPage = () => {
           <div className="mb-4 flex items-center justify-start gap-2">
             <ShipWheelIcon className="size-9 text-primary" />
             <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
-              Streamify
+              TokNext
             </span>
           </div>
           {/* ERROR MESSAGE IF ANY */}
